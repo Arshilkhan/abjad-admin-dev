@@ -15,8 +15,6 @@ export default function Organizations() {
 
   const [rows, setRows] = useState<Organization[] | null>(null);
   const [q, setQ] = useState("");
-  const [status, setStatus] = useState<"All" | OrgStatus>("All");
-  const [plan, setPlan] = useState<"All" | PlanName>("All");
   const [asc, setAsc] = useState(true);
   const [status, setStatus] = useState<OrgStatus | "All" | "">("");
   const [plan, setPlan] = useState<PlanName | "All" | "">("");
@@ -34,8 +32,8 @@ export default function Organizations() {
         .filter(
           (o) =>
             o.name.toLowerCase().includes(q.toLowerCase()) &&
-            (status === "All" || o.status === status) &&
-            (plan === "All" || o.plan === plan),
+            (status === "" || status === "All" || o.status === status) &&
+            (plan === "" || plan === "All" || o.plan === plan),
         )
         .sort((a, b) =>
           asc
@@ -79,7 +77,7 @@ export default function Organizations() {
             aria-label="Status"
             value={status}
             onChange={(e) =>
-              setStatus(e.target.value as "All" | OrgStatus)
+              setStatus(e.target.value as "All" | "")
             }
           >
             <option value="" disabled>
@@ -97,7 +95,7 @@ export default function Organizations() {
             aria-label="Plan"
             value={plan}
             onChange={(e) =>
-              setPlan(e.target.value as "All" | PlanName)
+              setPlan(e.target.value as "All" | "")
             }
           >
             <option value="" disabled>
