@@ -18,6 +18,8 @@ export default function Organizations() {
   const [status, setStatus] = useState<"All" | OrgStatus>("All");
   const [plan, setPlan] = useState<"All" | PlanName>("All");
   const [asc, setAsc] = useState(true);
+  const [status, setStatus] = useState<OrgStatus | "All" | "">("");
+  const [plan, setPlan] = useState<PlanName | "All" | "">("");
   const [del, setDel] = useState<Organization | null>(null);
 
   const load = () => organizationService.getAll().then(setRows);
@@ -77,14 +79,17 @@ export default function Organizations() {
             aria-label="Status"
             value={status}
             onChange={(e) =>
-              setStatus(e.target.value as "Status" | OrgStatus)
+              setStatus(e.target.value as "All" | OrgStatus)
             }
           >
-            {["Status", "Active", "Trial", "Suspended", "Cancelled"].map(
-              (s) => (
-                <option key={s}>{s}</option>
-              ),
-            )}
+            <option value="" disabled>
+              Status
+            </option>
+            <option value="All">All</option>
+            <option value="Active">Active</option>
+            <option value="Trial">Trial</option>
+            <option value="Suspended">Suspended</option>
+            <option value="Cancelled">Cancelled</option>
           </select>
 
           <select
@@ -92,14 +97,17 @@ export default function Organizations() {
             aria-label="Plan"
             value={plan}
             onChange={(e) =>
-              setPlan(e.target.value as "Plan" | PlanName)
+              setPlan(e.target.value as "All" | PlanName)
             }
           >
-            {["Plan", "Trial", "Starter", "Business", "Enterprise"].map(
-              (s) => (
-                <option key={s}>{s}</option>
-              ),
-            )}
+            <option value="" disabled>
+              Plan
+            </option>
+            <option value="All">All</option>
+            <option value="Trial">Trial</option>
+            <option value="Starter">Starter</option>
+            <option value="Business">Business</option>
+            <option value="Enterprise">Enterprise</option>
           </select>
         </div>
       </div>
