@@ -10,12 +10,12 @@ import Features from "./pages/features";
 import Usage from "./pages/usage";
 import AuditLogs from "./pages/audit-logs";
 import Support from "./pages/support";
+import Settings from "./pages/settings";
 
 const rest = [
   ["users", "Users"],
   ["audit-logs", "Audit Logs"],
   ["support", "Support"],
-  ["settings", "Settings"],
   ["profile", "Profile"],
   ["organizations/:id", "Organization Details"],
 ];
@@ -35,6 +35,7 @@ export default function App() {
         <Route path="usage" element={<Usage />} />
         <Route path="audit-logs" element={<AuditLogs />} />
         <Route path="support" element={<Support />} />
+        <Route path="settings" element={<Settings />} />
 
         {rest.map(([p, t]) => (
           <Route key={p} path={p} element={<Coming title={t} />} />
