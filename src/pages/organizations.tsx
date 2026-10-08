@@ -80,7 +80,7 @@ export default function Organizations() {
               setStatus(e.target.value as "Status" | OrgStatus)
             }
           >
-            {["All", "Active", "Trial", "Suspended", "Cancelled"].map(
+            {["Status", "Active", "Trial", "Suspended", "Cancelled"].map(
               (s) => (
                 <option key={s}>{s}</option>
               ),
@@ -95,7 +95,7 @@ export default function Organizations() {
               setPlan(e.target.value as "Plan" | PlanName)
             }
           >
-            {["All", "Trial", "Starter", "Business", "Enterprise"].map(
+            {["Plan", "Trial", "Starter", "Business", "Enterprise"].map(
               (s) => (
                 <option key={s}>{s}</option>
               ),
