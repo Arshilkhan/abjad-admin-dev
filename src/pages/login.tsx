@@ -83,22 +83,19 @@ export default function Login() {
                                         Email
                                     </label>
 
-                                    <div className="relative">
-                                        <Mail
-                                            size={16}
-                                            className="pointer-events-none absolute left-3 top-3 text-slate-400"
-                                        />
+                                    <div className="flex items-center rounded-lg border border-slate-300 bg-white dark:border-slate-700 dark:bg-slate-900">
+                                        <div className="flex shrink-0 items-center pl-3 text-slate-400">
+                                            <Mail size={16} />
+                                        </div>
 
                                         <input
                                             id="email"
                                             type="email"
                                             autoComplete="email"
                                             value={email}
-                                            onChange={(event) =>
-                                                setEmail(event.target.value)
-                                            }
+                                            onChange={(event) => setEmail(event.target.value)}
                                             placeholder="admin@example.com"
-                                            className="input w-full pl-9"
+                                            className="w-full border-0 bg-transparent px-3 py-2 text-sm outline-none focus:ring-0"
                                         />
                                     </div>
                                 </div>
@@ -108,22 +105,19 @@ export default function Login() {
                                         Password
                                     </label>
 
-                                    <div className="relative">
-                                        <LockKeyhole
-                                            size={16}
-                                            className="pointer-events-none absolute left-3 top-3 text-slate-400"
-                                        />
+                                    <div className="flex items-center rounded-lg border border-slate-300 bg-white dark:border-slate-700 dark:bg-slate-900">
+                                        <div className="flex shrink-0 items-center pl-3 text-slate-400">
+                                            <LockKeyhole size={16} />
+                                        </div>
 
                                         <input
                                             id="password"
                                             type="password"
                                             autoComplete="current-password"
                                             value={password}
-                                            onChange={(event) =>
-                                                setPassword(event.target.value)
-                                            }
+                                            onChange={(event) => setPassword(event.target.value)}
                                             placeholder="Enter password"
-                                            className="input w-full pl-9"
+                                            className="w-full border-0 bg-transparent px-3 py-2 text-sm outline-none focus:ring-0"
                                         />
                                     </div>
                                 </div>
