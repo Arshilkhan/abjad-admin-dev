@@ -8,6 +8,8 @@ import Subscriptions from "./pages/subscriptions";
 import AccessControl from "./pages/access-control";
 import Features from "./pages/features";
 import Usage from "./pages/usage";
+import AuditLogs from "./pages/audit-logs";
+import Support from "./pages/support";
 
 const rest = [
   ["users", "Users"],
@@ -31,6 +33,8 @@ export default function App() {
         <Route path="access-control" element={<AccessControl />} />
         <Route path="features" element={<Features />} />
         <Route path="usage" element={<Usage />} />
+        <Route path="audit-logs" element={<AuditLogs />} />
+        <Route path="support" element={<Support />} />
 
         {rest.map(([p, t]) => (
           <Route key={p} path={p} element={<Coming title={t} />} />
