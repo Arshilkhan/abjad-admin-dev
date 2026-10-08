@@ -6,11 +6,11 @@ import CreateOrganization from "./pages/create-organization";
 import Coming from "./pages/coming";
 import Subscriptions from "./pages/subscriptions";
 import AccessControl from "./pages/access-control";
+import Features from "./pages/features";
+import Usage from "./pages/usage";
 
 const rest = [
   ["users", "Users"],
-  ["features", "Features"],
-  ["usage", "Usage & Limits"],
   ["audit-logs", "Audit Logs"],
   ["support", "Support"],
   ["settings", "Settings"],
@@ -29,6 +29,8 @@ export default function App() {
         <Route path="organizations/new" element={<CreateOrganization />} />
         <Route path="subscriptions" element={<Subscriptions />} />
         <Route path="access-control" element={<AccessControl />} />
+        <Route path="features" element={<Features />} />
+        <Route path="usage" element={<Usage />} />
 
         {rest.map(([p, t]) => (
           <Route key={p} path={p} element={<Coming title={t} />} />
