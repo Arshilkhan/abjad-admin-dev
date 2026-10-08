@@ -4,10 +4,10 @@ import Dashboard from "./pages/dashboard";
 import Organizations from "./pages/organizations";
 import CreateOrganization from "./pages/create-organization";
 import Coming from "./pages/coming";
+import Subscriptions from "./pages/subscriptions";
 
 const rest = [
   ["users", "Users"],
-  ["subscriptions", "Subscriptions"],
   ["access-control", "Access Control"],
   ["features", "Features"],
   ["usage", "Usage & Limits"],
@@ -27,6 +27,7 @@ export default function App() {
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="organizations" element={<Organizations />} />
         <Route path="organizations/new" element={<CreateOrganization />} />
+        <Route path="subscriptions" element={<Subscriptions />} />
 
         {rest.map(([p, t]) => (
           <Route key={p} path={p} element={<Coming title={t} />} />
