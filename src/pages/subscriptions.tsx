@@ -40,12 +40,13 @@ const statusTone: Record<string, string> = {
 export default function Subscriptions() {
   return (
     <div className="space-y-6">
+      {/* Header */}
       <div className="flex items-start gap-3">
-        <div className="grid h-10 w-10 place-items-center rounded-lg bg-brand-soft text-brand">
+        <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-brand-soft text-brand">
           <CreditCard size={20} />
         </div>
 
-        <div>
+        <div className="min-w-0">
           <h1 className="text-2xl font-semibold">Subscriptions</h1>
           <p className="text-sm text-slate-500">
             Assign and manage subscriptions for organizations.
@@ -53,9 +54,12 @@ export default function Subscriptions() {
         </div>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      {/* Summary */}
+      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <div className="card p-4">
-          <div className="text-xs text-slate-500">Total Organizations</div>
+          <div className="text-xs text-slate-500">
+            Total Organizations
+          </div>
           <div className="mt-1 text-2xl font-semibold">27</div>
         </div>
 
@@ -75,7 +79,8 @@ export default function Subscriptions() {
         </div>
       </div>
 
-      <div className="card overflow-x-auto">
+      {/* Desktop table */}
+      <div className="card hidden overflow-x-auto md:block">
         <table className="w-full text-left text-sm">
           <thead className="border-b border-slate-200 text-xs text-slate-500 dark:border-slate-800">
             <tr>
@@ -104,9 +109,8 @@ export default function Subscriptions() {
 
                 <td className="p-3">
                   <span
-                    className={`rounded-full px-2 py-0.5 text-xs ${
-                      statusTone[subscription.status]
-                    }`}
+                    className={`rounded-full px-2 py-0.5 text-xs ${statusTone[subscription.status]
+                      }`}
                   >
                     {subscription.status}
                   </span>
@@ -121,14 +125,67 @@ export default function Subscriptions() {
                 </td>
 
                 <td className="p-3 text-right">
-                  <button className="btn">
-                    Manage
-                  </button>
+                  <button className="btn">Manage</button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* Mobile cards */}
+      <div className="space-y-3 md:hidden">
+        {subscriptions.map((subscription) => (
+          <div
+            key={subscription.organization}
+            className="card p-4"
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <h2 className="font-semibold">
+                  {subscription.organization}
+                </h2>
+
+                <p className="mt-1 text-sm text-slate-500">
+                  {subscription.plan}
+                </p>
+              </div>
+
+              <span
+                className={`shrink-0 rounded-full px-2 py-1 text-xs ${statusTone[subscription.status]
+                  }`}
+              >
+                {subscription.status}
+              </span>
+            </div>
+
+            <div className="mt-4 grid grid-cols-2 gap-4 border-t border-slate-100 pt-4 dark:border-slate-800">
+              <div>
+                <p className="text-xs text-slate-500">
+                  Started
+                </p>
+                <p className="mt-1 text-sm font-medium">
+                  {subscription.started}
+                </p>
+              </div>
+
+              <div>
+                <p className="text-xs text-slate-500">
+                  Renewal
+                </p>
+                <p className="mt-1 text-sm font-medium">
+                  {subscription.renewal}
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-4 border-t border-slate-100 pt-4 dark:border-slate-800">
+              <button className="btn w-full">
+                Manage Subscription
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

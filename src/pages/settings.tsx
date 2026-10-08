@@ -19,11 +19,11 @@ export default function Settings() {
     <div className="mx-auto max-w-5xl space-y-6">
       {/* Header */}
       <div className="flex items-start gap-3">
-        <div className="grid h-10 w-10 place-items-center rounded-lg bg-brand-soft text-brand">
+        <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-brand-soft text-brand">
           <SettingsIcon size={20} />
         </div>
 
-        <div>
+        <div className="min-w-0">
           <h1 className="text-2xl font-semibold">Settings</h1>
           <p className="text-sm text-slate-500">
             Manage platform-wide ABJAD settings and defaults.
@@ -32,88 +32,50 @@ export default function Settings() {
       </div>
 
       {/* Platform Information */}
-      <section className="card p-6">
-        <div className="mb-5 flex items-start gap-3">
-          <div className="grid h-9 w-9 place-items-center rounded-lg bg-brand-soft text-brand">
-            <ShieldCheck size={18} />
-          </div>
-
-          <div>
-            <h2 className="font-semibold">Platform Information</h2>
-            <p className="text-sm text-slate-500">
-              Basic information displayed across the ABJAD platform.
-            </p>
-          </div>
-        </div>
+      <section className="card p-4 sm:p-6">
+        <SectionHeader
+          icon={<ShieldCheck size={18} />}
+          title="Platform Information"
+          description="Basic information displayed across the ABJAD platform."
+        />
 
         <div className="grid gap-4 md:grid-cols-2">
-          <div>
-            <label className="label" htmlFor="platformName">
-              Platform Name
-            </label>
+          <Field
+            id="platformName"
+            label="Platform Name"
+            defaultValue="ABJAD ERP"
+          />
 
-            <input
-              id="platformName"
-              className="input w-full"
-              defaultValue="ABJAD ERP"
-            />
-          </div>
+          <Field
+            id="supportEmail"
+            label="Support Email"
+            type="email"
+            defaultValue="support@abjadengineeringworks.in"
+          />
 
-          <div>
-            <label className="label" htmlFor="supportEmail">
-              Support Email
-            </label>
+          <Field
+            id="supportPhone"
+            label="Support Phone"
+            type="tel"
+            defaultValue="+91"
+          />
 
-            <input
-              id="supportEmail"
-              type="email"
-              className="input w-full"
-              defaultValue="support@abjadengineeringworks.in"
-            />
-          </div>
-
-          <div>
-            <label className="label" htmlFor="supportPhone">
-              Support Phone
-            </label>
-
-            <input
-              id="supportPhone"
-              type="tel"
-              className="input w-full"
-              defaultValue="+91"
-            />
-          </div>
-
-          <div>
-            <label className="label" htmlFor="platformWebsite">
-              Platform Website
-            </label>
-
-            <input
-              id="platformWebsite"
-              type="url"
-              className="input w-full"
-              defaultValue="https://abjadengineeringworks.in"
-            />
-          </div>
+          <Field
+            id="platformWebsite"
+            label="Platform Website"
+            type="url"
+            defaultValue="https://abjadengineeringworks.in"
+          />
         </div>
       </section>
 
       {/* Regional Defaults */}
-      <section className="card p-6">
-        <div className="mb-5 flex items-start gap-3">
-          <div className="grid h-9 w-9 place-items-center rounded-lg bg-brand-soft text-brand">
-            <Globe2 size={18} />
-          </div>
-
-          <div>
-            <h2 className="font-semibold">Regional Defaults</h2>
-            <p className="text-sm text-slate-500">
-              Default regional settings for the ABJAD platform.
-            </p>
-          </div>
-        </div>
+      <section className="card p-4 sm:p-6">
+        <SectionHeader
+          icon={<Globe2 size={18} />}
+          title="Regional Defaults"
+          description="Default regional settings for the ABJAD platform."
+        />
 
         <div className="grid gap-4 md:grid-cols-2">
           <div>
@@ -183,62 +145,36 @@ export default function Settings() {
       </section>
 
       {/* Email */}
-      <section className="card p-6">
-        <div className="mb-5 flex items-start gap-3">
-          <div className="grid h-9 w-9 place-items-center rounded-lg bg-brand-soft text-brand">
-            <Mail size={18} />
-          </div>
-
-          <div>
-            <h2 className="font-semibold">Email</h2>
-            <p className="text-sm text-slate-500">
-              Default email settings for platform-generated messages.
-            </p>
-          </div>
-        </div>
+      <section className="card p-4 sm:p-6">
+        <SectionHeader
+          icon={<Mail size={18} />}
+          title="Email"
+          description="Default email settings for platform-generated messages."
+        />
 
         <div className="grid gap-4 md:grid-cols-2">
-          <div>
-            <label className="label" htmlFor="senderName">
-              Sender Name
-            </label>
+          <Field
+            id="senderName"
+            label="Sender Name"
+            defaultValue="ABJAD ERP"
+          />
 
-            <input
-              id="senderName"
-              className="input w-full"
-              defaultValue="ABJAD ERP"
-            />
-          </div>
-
-          <div>
-            <label className="label" htmlFor="senderEmail">
-              Sender Email
-            </label>
-
-            <input
-              id="senderEmail"
-              type="email"
-              className="input w-full"
-              defaultValue="noreply@abjadengineeringworks.in"
-            />
-          </div>
+          <Field
+            id="senderEmail"
+            label="Sender Email"
+            type="email"
+            defaultValue="noreply@abjadengineeringworks.in"
+          />
         </div>
       </section>
 
       {/* System */}
-      <section className="card p-6">
-        <div className="mb-5 flex items-start gap-3">
-          <div className="grid h-9 w-9 place-items-center rounded-lg bg-brand-soft text-brand">
-            <Wrench size={18} />
-          </div>
-
-          <div>
-            <h2 className="font-semibold">System</h2>
-            <p className="text-sm text-slate-500">
-              Platform-wide system controls.
-            </p>
-          </div>
-        </div>
+      <section className="card p-4 sm:p-6">
+        <SectionHeader
+          icon={<Wrench size={18} />}
+          title="System"
+          description="Platform-wide system controls."
+        />
 
         <div className="divide-y divide-slate-100 dark:divide-slate-800">
           <SettingToggle
@@ -257,7 +193,7 @@ export default function Settings() {
         </div>
 
         {maintenanceMode && (
-          <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+          <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-5 text-amber-800">
             Maintenance mode is enabled. Organizations would be unable to
             access the ERP while this setting is active.
           </div>
@@ -265,15 +201,65 @@ export default function Settings() {
       </section>
 
       {/* Actions */}
-      <div className="flex justify-end">
+      <div className="flex">
         <button
           type="button"
-          className="btn btn-primary"
+          className="btn btn-primary w-full sm:w-auto sm:ml-auto"
           onClick={handleSave}
         >
           Save Settings
         </button>
       </div>
+    </div>
+  );
+}
+
+function SectionHeader({
+  icon,
+  title,
+  description,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+}) {
+  return (
+    <div className="mb-5 flex items-start gap-3">
+      <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-brand-soft text-brand">
+        {icon}
+      </div>
+
+      <div className="min-w-0">
+        <h2 className="font-semibold">{title}</h2>
+        <p className="text-sm text-slate-500">{description}</p>
+      </div>
+    </div>
+  );
+}
+
+function Field({
+  id,
+  label,
+  type = "text",
+  defaultValue,
+}: {
+  id: string;
+  label: string;
+  type?: string;
+  defaultValue: string;
+}) {
+  return (
+    <div>
+      <label className="label" htmlFor={id}>
+        {label}
+      </label>
+
+      <input
+        id={id}
+        type={type}
+        className="input w-full"
+        defaultValue={defaultValue}
+      />
     </div>
   );
 }
@@ -293,9 +279,10 @@ function SettingToggle({
 }: SettingToggleProps) {
   return (
     <div className="flex items-center justify-between gap-4 py-4">
-      <div>
+      <div className="min-w-0 pr-2">
         <div className="text-sm font-medium">{title}</div>
-        <div className="mt-1 text-xs text-slate-500">
+
+        <div className="mt-1 text-xs leading-5 text-slate-500">
           {description}
         </div>
       </div>
@@ -304,6 +291,7 @@ function SettingToggle({
         type="button"
         role="switch"
         aria-checked={enabled}
+        aria-label={`${enabled ? "Disable" : "Enable"} ${title}`}
         onClick={() => onChange(!enabled)}
         className={`relative h-6 w-11 shrink-0 rounded-full transition ${
           enabled

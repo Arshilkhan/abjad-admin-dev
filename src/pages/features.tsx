@@ -112,7 +112,7 @@ export default function Features() {
             </div>
           </div>
 
-          <div className="rounded-lg bg-slate-50 px-4 py-2.5 dark:bg-slate-800">
+          <div className="w-full rounded-lg bg-slate-50 px-4 py-2.5 sm:w-auto dark:bg-slate-800">
             <div className="text-xs text-slate-500">
               Features enabled
             </div>
@@ -154,7 +154,7 @@ export default function Features() {
             return (
               <div
                 key={feature.id}
-                className="flex items-center justify-between gap-4 px-5 py-4"
+                className="flex items-center justify-between gap-3 px-4 py-4 sm:px-5"
               >
                 <div>
                   <div className="text-sm font-medium">
@@ -191,14 +191,14 @@ export default function Features() {
           })}
         </div>
 
-        <div className="flex items-center justify-between border-t border-slate-200 px-5 py-4 dark:border-slate-800">
+        <div className="flex flex-col gap-3 border-t border-slate-200 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5 dark:border-slate-800">
           <p className="text-xs text-slate-500">
             Changes are currently for UI preview only.
           </p>
 
           <button
             type="button"
-            className="btn btn-primary"
+            className="btn btn-primary w-full sm:w-auto"
             onClick={() => alert("Feature settings saved.")}
           >
             Save Changes

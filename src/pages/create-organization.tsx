@@ -1,4 +1,9 @@
-import { ArrowLeft, Building2, CreditCard, UserRound } from "lucide-react";
+import {
+  ArrowLeft,
+  Building2,
+  CreditCard,
+  UserRound,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const states = [
@@ -32,7 +37,6 @@ export default function CreateOrganization() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Static UI phase — no backend operation yet.
     alert("Organization created successfully.");
     navigate("/organizations");
   };
@@ -43,15 +47,18 @@ export default function CreateOrganization() {
       <div className="flex items-start gap-3">
         <button
           type="button"
-          className="btn mt-1"
+          className="btn mt-1 shrink-0"
           onClick={() => navigate("/organizations")}
           aria-label="Back to organizations"
         >
           <ArrowLeft size={16} />
         </button>
 
-        <div>
-          <h1 className="text-2xl font-semibold">Create Organization</h1>
+        <div className="min-w-0">
+          <h1 className="text-2xl font-semibold">
+            Create Organization
+          </h1>
+
           <p className="text-sm text-slate-500">
             Onboard a new organization to the ABJAD platform.
           </p>
@@ -60,19 +67,12 @@ export default function CreateOrganization() {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Company Profile */}
-        <section className="card p-6">
-          <div className="mb-5 flex items-start gap-3">
-            <div className="grid h-9 w-9 place-items-center rounded-lg bg-brand-soft text-brand">
-              <Building2 size={18} />
-            </div>
-
-            <div>
-              <h2 className="font-semibold">Company Profile</h2>
-              <p className="text-sm text-slate-500">
-                Basic information about the organization.
-              </p>
-            </div>
-          </div>
+        <section className="card p-4 sm:p-6">
+          <SectionHeader
+            icon={<Building2 size={18} />}
+            title="Company Profile"
+            description="Basic information about the organization."
+          />
 
           <div className="grid gap-4 md:grid-cols-2">
             <Field
@@ -93,6 +93,7 @@ export default function CreateOrganization() {
               <label className="label" htmlFor="address">
                 Address
               </label>
+
               <textarea
                 id="address"
                 name="address"
@@ -120,6 +121,7 @@ export default function CreateOrganization() {
               <label className="label" htmlFor="state">
                 State
               </label>
+
               <select
                 id="state"
                 name="state"
@@ -150,19 +152,12 @@ export default function CreateOrganization() {
         </section>
 
         {/* Contact Information */}
-        <section className="card p-6">
-          <div className="mb-5 flex items-start gap-3">
-            <div className="grid h-9 w-9 place-items-center rounded-lg bg-brand-soft text-brand">
-              <UserRound size={18} />
-            </div>
-
-            <div>
-              <h2 className="font-semibold">Contact Information</h2>
-              <p className="text-sm text-slate-500">
-                Primary contact details for the organization.
-              </p>
-            </div>
-          </div>
+        <section className="card p-4 sm:p-6">
+          <SectionHeader
+            icon={<UserRound size={18} />}
+            title="Contact Information"
+            description="Primary contact details for the organization."
+          />
 
           <div className="grid gap-4 md:grid-cols-2">
             <Field
@@ -170,6 +165,7 @@ export default function CreateOrganization() {
               name="mobile"
               type="tel"
               placeholder="Enter mobile number"
+              inputMode="tel"
               required
             />
 
@@ -178,6 +174,7 @@ export default function CreateOrganization() {
               name="altMobile"
               type="tel"
               placeholder="Enter alternate mobile number"
+              inputMode="tel"
             />
 
             <div className="md:col-span-2">
@@ -189,7 +186,7 @@ export default function CreateOrganization() {
                 required
               />
 
-              <p className="mt-1.5 text-xs text-slate-500">
+              <p className="mt-1.5 text-xs leading-5 text-slate-500">
                 This email address will be used to log in to the organization.
               </p>
             </div>
@@ -197,19 +194,12 @@ export default function CreateOrganization() {
         </section>
 
         {/* Bank Information */}
-        <section className="card p-6">
-          <div className="mb-5 flex items-start gap-3">
-            <div className="grid h-9 w-9 place-items-center rounded-lg bg-brand-soft text-brand">
-              <CreditCard size={18} />
-            </div>
-
-            <div>
-              <h2 className="font-semibold">Bank Information</h2>
-              <p className="text-sm text-slate-500">
-                Tax and banking details for the organization.
-              </p>
-            </div>
-          </div>
+        <section className="card p-4 sm:p-6">
+          <SectionHeader
+            icon={<CreditCard size={18} />}
+            title="Bank Information"
+            description="Tax and banking details for the organization."
+          />
 
           <div className="grid gap-4 md:grid-cols-2">
             <Field
@@ -257,17 +247,46 @@ export default function CreateOrganization() {
         <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
           <button
             type="button"
-            className="btn"
+            className="btn w-full sm:w-auto"
             onClick={() => navigate("/organizations")}
           >
             Cancel
           </button>
 
-          <button type="submit" className="btn btn-primary">
+          <button
+            type="submit"
+            className="btn btn-primary w-full sm:w-auto"
+          >
             Create Organization
           </button>
         </div>
       </form>
+    </div>
+  );
+}
+
+function SectionHeader({
+  icon,
+  title,
+  description,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+}) {
+  return (
+    <div className="mb-5 flex items-start gap-3">
+      <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-brand-soft text-brand">
+        {icon}
+      </div>
+
+      <div className="min-w-0">
+        <h2 className="font-semibold">{title}</h2>
+
+        <p className="text-sm text-slate-500">
+          {description}
+        </p>
+      </div>
     </div>
   );
 }
@@ -293,7 +312,10 @@ function Field({
     <div>
       <label className="label" htmlFor={name}>
         {label}
-        {required && <span className="ml-1 text-red-500">*</span>}
+
+        {required && (
+          <span className="ml-1 text-red-500">*</span>
+        )}
       </label>
 
       <input

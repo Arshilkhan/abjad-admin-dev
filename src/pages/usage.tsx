@@ -92,12 +92,13 @@ export default function Usage() {
 
   return (
     <div className="mx-auto max-w-5xl space-y-6">
+      {/* Header */}
       <div className="flex items-start gap-3">
-        <div className="grid h-10 w-10 place-items-center rounded-lg bg-brand-soft text-brand">
+        <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-brand-soft text-brand">
           <Gauge size={20} />
         </div>
 
-        <div>
+        <div className="min-w-0">
           <h1 className="text-2xl font-semibold">Usage & Limits</h1>
           <p className="text-sm text-slate-500">
             Configure usage limits and monitor resource consumption for each
@@ -107,7 +108,7 @@ export default function Usage() {
       </div>
 
       {/* Organization */}
-      <div className="card p-5">
+      <div className="card p-4 sm:p-5">
         <label htmlFor="organization" className="label">
           Organization
         </label>
@@ -147,7 +148,7 @@ export default function Usage() {
 
       {/* Limits */}
       <div className="card overflow-hidden">
-        <div className="border-b border-slate-200 px-5 py-4 dark:border-slate-800">
+        <div className="border-b border-slate-200 px-4 py-4 sm:px-5 dark:border-slate-800">
           <h2 className="font-semibold">Usage Limits</h2>
 
           <p className="mt-1 text-sm text-slate-500">
@@ -158,6 +159,7 @@ export default function Usage() {
         <div className="divide-y divide-slate-100 dark:divide-slate-800">
           {limits.map((limit) => {
             const maximum = Number(limit.value) || 0;
+
             const percentage =
               maximum > 0
                 ? Math.min((limit.used / maximum) * 100, 100)
@@ -166,37 +168,47 @@ export default function Usage() {
             const warning = percentage >= 80;
 
             return (
-              <div key={limit.id} className="px-5 py-5">
+              <div key={limit.id} className="px-4 py-5 sm:px-5">
+                {/* Limit heading + input */}
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                   <div className="min-w-0">
                     <div className="text-sm font-medium">
                       {limit.name}
                     </div>
 
-                    <div className="mt-1 text-xs text-slate-500">
+                    <div className="mt-1 text-xs leading-5 text-slate-500">
                       {limit.description}
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3">
+                  <div className="flex w-full flex-col gap-1.5 sm:w-auto sm:flex-row sm:items-center sm:gap-3">
+                    <label
+                      htmlFor={`limit-${limit.id}`}
+                      className="text-xs text-slate-500 sm:sr-only"
+                    >
+                      Maximum limit
+                    </label>
+
                     <input
+                      id={`limit-${limit.id}`}
                       type="number"
                       min="0"
                       value={limit.value}
                       onChange={(event) =>
                         updateLimit(limit.id, event.target.value)
                       }
-                      className="input w-32"
+                      className="input w-full sm:w-32"
                     />
 
-                    <span className="w-36 text-xs text-slate-500">
+                    <span className="text-xs text-slate-500 sm:w-36">
                       {limit.unit}
                     </span>
                   </div>
                 </div>
 
-                <div className="mt-4">
-                  <div className="mb-1 flex justify-between text-xs">
+                {/* Usage */}
+                <div className="mt-5">
+                  <div className="mb-1.5 flex items-center justify-between gap-3 text-xs">
                     <span className="text-slate-500">
                       Current usage
                     </span>
@@ -220,20 +232,25 @@ export default function Usage() {
                       style={{ width: `${percentage}%` }}
                     />
                   </div>
+
+                  <div className="mt-1 text-right text-[11px] text-slate-400">
+                    {Math.round(percentage)}% used
+                  </div>
                 </div>
               </div>
             );
           })}
         </div>
 
-        <div className="flex items-center justify-between border-t border-slate-200 px-5 py-4 dark:border-slate-800">
+        {/* Actions */}
+        <div className="flex flex-col gap-3 border-t border-slate-200 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5 dark:border-slate-800">
           <p className="text-xs text-slate-500">
             Changes are currently for UI preview only.
           </p>
 
           <button
             type="button"
-            className="btn btn-primary"
+            className="btn btn-primary w-full sm:w-auto"
             onClick={() => alert("Usage limits saved.")}
           >
             Save Changes
