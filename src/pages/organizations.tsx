@@ -77,7 +77,7 @@ export default function Organizations() {
             aria-label="Status"
             value={status}
             onChange={(e) =>
-              setStatus(e.target.value as "All" | OrgStatus)
+              setStatus(e.target.value as "Status" | OrgStatus)
             }
           >
             {["All", "Active", "Trial", "Suspended", "Cancelled"].map(
@@ -92,7 +92,7 @@ export default function Organizations() {
             aria-label="Plan"
             value={plan}
             onChange={(e) =>
-              setPlan(e.target.value as "All" | PlanName)
+              setPlan(e.target.value as "Plan" | PlanName)
             }
           >
             {["All", "Trial", "Starter", "Business", "Enterprise"].map(
