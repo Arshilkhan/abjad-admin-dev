@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Building2, Gauge } from "lucide-react";
+import { Gauge } from "lucide-react";
 import { organizationService } from "../services/organizationService";
 import type { Organization } from "../types";
 
@@ -113,6 +113,7 @@ export default function Usage() {
           Organization
         </label>
 
+        <div className="relative">
           <select
             id="organization"
             value={selectedOrg}

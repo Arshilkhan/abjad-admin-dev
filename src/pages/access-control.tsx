@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Building2, Check, ShieldCheck } from "lucide-react";
+import { Check, ShieldCheck } from "lucide-react";
 import { organizationService } from "../services/organizationService";
 import type { Organization } from "../types";
 
@@ -83,10 +83,6 @@ export default function AccessControl() {
                         </label>
 
                         <div className="relative">
-                            <Building2
-                                size={16}
-                                className="pointer-events-none absolute left-3 top-3 text-slate-400"
-                            />
 
                             <select
                                 id="organization"
