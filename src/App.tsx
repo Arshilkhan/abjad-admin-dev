@@ -13,6 +13,7 @@ import Support from "./pages/support";
 import Settings from "./pages/settings";
 import Login from "./pages/login";
 import { AuthProvider, useAuth } from "./auth/auth-context";
+import EditOrganization from "./pages/edit-organization";
 
 const rest = [
   ["profile", "Profile"],
@@ -82,6 +83,10 @@ export default function App() {
           <Route
             path="organizations/new"
             element={<CreateOrganization />}
+          />
+          <Route
+            path="organizations/:id/edit"
+            element={<EditOrganization />}
           />
           <Route path="subscriptions" element={<Subscriptions />} />
           <Route path="access-control" element={<AccessControl />} />

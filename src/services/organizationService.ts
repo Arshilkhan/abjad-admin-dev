@@ -96,10 +96,39 @@ export const organizationService = {
     );
   },
 
+
   suspend: async (id: string): Promise<void> => {
     await apiRequest(`/api/admin/organizations/${encodeURIComponent(id)}`, {
       method: "PATCH",
       body: JSON.stringify({ status: "suspended" }),
     });
+  },
+
+  reactivate: async (id: string): Promise<void> => {
+    await apiRequest(`/api/admin/organizations/${encodeURIComponent(id)}`, {
+      method: "PATCH",
+      body: JSON.stringify({ status: "active" }),
+    });
+  },
+
+  cancel: async (id: string): Promise<void> => {
+    await apiRequest(`/api/admin/organizations/${encodeURIComponent(id)}`, {
+      method: "PATCH",
+      body: JSON.stringify({ status: "cancelled" }),
+    });
+  },
+  
+  update: async (
+    id: string,
+    changes: { name: string },
+  ): Promise<Organization> => {
+    const result = await apiRequest<{
+      organization: ApiOrganization;
+    }>(`/api/admin/organizations/${encodeURIComponent(id)}`, {
+      method: "PATCH",
+      body: JSON.stringify(changes),
+    });
+
+    return mapOrganization(result.organization);
   },
 };
