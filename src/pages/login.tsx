@@ -11,21 +11,33 @@ export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const from = location.state?.from?.pathname || "/dashboard";
 
-    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setError("");
+        setIsSubmitting(true);
 
-        const success = login(email, password);
+        try {
+            const result = await login(email, password);
 
-        if (!success) {
-            setError("Please enter your email and password.");
-            return;
+            if (result.error) {
+                setError(
+                    result.error === "Invalid login credentials"
+                        ? "Invalid email or password."
+                        : result.error
+                );
+                return;
+            }
+
+            navigate(from, { replace: true });
+        } catch {
+            setError("Unable to sign in. Please try again.");
+        } finally {
+            setIsSubmitting(false);
         }
-
-        navigate(from, { replace: true });
     };
 
     return (
@@ -130,15 +142,15 @@ export default function Login() {
 
                                 <button
                                     type="submit"
-                                    className="btn btn-primary w-full"
+                                    disabled={isSubmitting}
+                                    className="btn btn-primary w-full disabled:cursor-not-allowed disabled:opacity-60"
                                 >
-                                    Login
+                                    {isSubmitting ? "Signing in…" : "Login"}
                                 </button>
                             </form>
 
                             <p className="mt-5 text-center text-xs text-slate-400">
-                                Development login — authentication is currently
-                                static.
+                                Sign in with your authorized platform administrator account.
                             </p>
                         </div>
                     </div>

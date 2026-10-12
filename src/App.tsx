@@ -20,16 +20,49 @@ const rest = [
 ];
 
 function ProtectedLayout() {
-  const { isAuthenticated } = useAuth();
+  const {
+    isAuthenticated,
+    isPlatformAdmin,
+    isLoading,
+    authError,
+    logout,
+  } = useAuth();
   const location = useLocation();
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center text-sm text-slate-500">
+        Verifying platform access…
+      </div>
+    );
+  }
 
   if (!isAuthenticated) {
     return (
-      <Navigate
-        to="/login"
-        replace
-        state={{ from: location }}
-      />
+      <Navigate to="/login" replace state={{ from: location }} />
+    );
+  }
+
+  if (!isPlatformAdmin) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-slate-50 p-6 dark:bg-slate-950">
+        <div className="w-full max-w-md rounded-xl border border-slate-200 bg-white p-8 text-center dark:border-slate-800 dark:bg-slate-900">
+          <h1 className="text-xl font-semibold">
+            Platform access denied
+          </h1>
+          <p className="mt-3 text-sm text-slate-500">
+            {authError ||
+              "Your account does not have platform administrator access."}
+          </p>
+          <button
+            type="button"
+            className="btn btn-primary mt-6"
+            onClick={() => void logout()}
+          >
+            Sign out
+          </button>
+        </div>
+      </div>
     );
   }
 
@@ -44,7 +77,6 @@ export default function App() {
 
         <Route element={<ProtectedLayout />}>
           <Route index element={<Navigate to="/dashboard" replace />} />
-
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="organizations" element={<Organizations />} />
           <Route
@@ -52,10 +84,7 @@ export default function App() {
             element={<CreateOrganization />}
           />
           <Route path="subscriptions" element={<Subscriptions />} />
-          <Route
-            path="access-control"
-            element={<AccessControl />}
-          />
+          <Route path="access-control" element={<AccessControl />} />
           <Route path="features" element={<Features />} />
           <Route path="usage" element={<Usage />} />
           <Route path="audit-logs" element={<AuditLogs />} />
