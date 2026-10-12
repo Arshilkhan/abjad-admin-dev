@@ -130,7 +130,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => {
       cancelled = true;
     };
-  }, [session, sessionReady]);
+  }, [session?.user?.id, sessionReady]);
 
   const login = useCallback(
     async (email: string, password: string) => {
