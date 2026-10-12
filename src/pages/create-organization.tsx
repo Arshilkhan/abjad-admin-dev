@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { supabase } from "../lib/supabase";
 import {
   ArrowLeft,
   Building2,
@@ -34,12 +36,75 @@ const states = [
 export default function CreateOrganization() {
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
 
-    alert("Organization created successfully.");
-    navigate("/organizations");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+
+  const apiBaseUrl = (
+    import.meta.env.VITE_PLATFORM_ADMIN_API_URL as string | undefined
+  )?.replace(/\/+$/, "");
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+    setSubmitError("");
+
+    try {
+      if (!apiBaseUrl) {
+        throw new Error("The platform API URL is not configured.");
+      }
+
+      const {
+        data: { session },
+        error: sessionError,
+      } = await supabase.auth.getSession();
+
+      if (sessionError || !session?.access_token) {
+        throw new Error("Your session has expired. Please sign in again.");
+      }
+
+      const formData = new FormData(e.currentTarget);
+      const payload = Object.fromEntries(formData.entries());
+
+      const response = await fetch(
+        `${apiBaseUrl}/api/admin/organizations`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${session.access_token}`,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify(payload),
+        },
+      );
+
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(
+          typeof result.error === "string"
+            ? result.error
+            : `Organization creation failed (HTTP ${response.status}).`,
+        );
+      }
+
+      navigate("/organizations", {
+        state: { successMessage: "Organization created successfully." },
+      });
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error
+          ? error.message
+          : "An unexpected error occurred while creating the organization.",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
 
   return (
     <div className="mx-auto max-w-5xl space-y-6">
@@ -66,6 +131,14 @@ export default function CreateOrganization() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
+        {submitError && (
+          <div
+            role="alert"
+            className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700"
+          >
+            {submitError}
+          </div>
+        )}
         {/* Company Profile */}
         <section className="card p-4 sm:p-6">
           <SectionHeader
@@ -252,13 +325,14 @@ export default function CreateOrganization() {
           >
             Cancel
           </button>
-
           <button
+            disabled={isSubmitting}
             type="submit"
             className="btn btn-primary w-full sm:w-auto"
           >
-            Create Organization
+            {isSubmitting ? "Creating..." : "Create Organization"}
           </button>
+
         </div>
       </form>
     </div>
