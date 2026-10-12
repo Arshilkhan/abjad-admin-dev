@@ -19,8 +19,87 @@ export default function Organizations() {
   const [status, setStatus] = useState<OrgStatus | "All" | "">("");
   const [plan, setPlan] = useState<PlanName | "All" | "">("");
   const [del, setDel] = useState<Organization | null>(null);
+  const [actionError, setActionError] = useState("");
+  const [actionLoadingId, setActionLoadingId] = useState<string | null>(null);
+  const [isCancelling, setIsCancelling] = useState(false);
 
-  const load = () => organizationService.getAll().then(setRows);
+  const load = async () => {
+    try {
+      const organizations = await organizationService.getAll();
+      setRows(organizations);
+    } catch (error) {
+      setActionError(
+        error instanceof Error
+          ? error.message
+          : "Could not load organizations.",
+      );
+    }
+  };
+
+  type OrganizationAction =
+    | "edit"
+    | "suspend"
+    | "reactivate"
+    | "cancel";
+
+  const handleAction = async (
+    organization: Organization,
+    action: OrganizationAction,
+  ) => {
+    setActionError("");
+
+    if (action === "edit") {
+      navigate(`/organizations/${organization.id}/edit`);
+      return;
+    }
+
+    if (action === "cancel") {
+      setDel(organization);
+      return;
+    }
+
+    setActionLoadingId(organization.id);
+
+    try {
+      if (action === "suspend") {
+        await organizationService.suspend(organization.id);
+      } else {
+        await organizationService.reactivate(organization.id);
+      }
+
+      await load();
+    } catch (error) {
+      setActionError(
+        error instanceof Error
+          ? error.message
+          : "Could not update organization status.",
+      );
+    } finally {
+      setActionLoadingId(null);
+    }
+  };
+
+  const confirmCancellation = async () => {
+    if (!del) return;
+
+    setIsCancelling(true);
+    setActionError("");
+
+    try {
+      await organizationService.cancel(del.id);
+      setDel(null);
+      await load();
+    } catch (error) {
+      setActionError(
+        error instanceof Error
+          ? error.message
+          : "Could not cancel organization.",
+      );
+    } finally {
+      setIsCancelling(false);
+    }
+  };
+
 
   useEffect(() => {
     load();
@@ -61,7 +140,14 @@ export default function Organizations() {
           + Create Organization
         </button>
       </div>
-
+      {actionError && (
+        <div
+          role="alert"
+          className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700"
+        >
+          {actionError}
+        </div>
+      )}
       {/* Filters */}
       <div className="card p-3">
         <div className="grid grid-cols-1 gap-2 sm:flex sm:flex-wrap">
@@ -185,25 +271,39 @@ export default function Organizations() {
                       />
                     </div>
                   </td>
-
                   <td className="whitespace-nowrap pr-3 text-right">
-                    <button
-                      className="btn"
-                      onClick={() =>
-                        organizationService
-                          .suspend(o.id)
-                          .then(load)
-                      }
-                    >
-                      Suspend
-                    </button>
+                    <select
+                      key={`${o.id}-${actionLoadingId === o.id ? "loading" : "ready"}`}
+                      className="input w-36"
+                      aria-label={`Actions for ${o.name}`}
+                      defaultValue=""
+                      disabled={actionLoadingId === o.id}
+                      onChange={(event) => {
+                        const action = event.target.value as OrganizationAction;
+                        event.currentTarget.value = "";
 
-                    <button
-                      className="btn"
-                      onClick={() => setDel(o)}
+                        if (action) {
+                          void handleAction(o, action);
+                        }
+                      }}
                     >
-                      Delete
-                    </button>
+                      <option value="" disabled>
+                        {actionLoadingId === o.id ? "Please wait…" : "Actions"}
+                      </option>
+                      <option value="edit">Edit</option>
+
+                      {o.status === "Active" || o.status === "Trial" ? (
+                        <option value="suspend">Suspend</option>
+                      ) : null}
+
+                      {o.status === "Suspended" ? (
+                        <option value="reactivate">Reactivate</option>
+                      ) : null}
+
+                      {o.status !== "Cancelled" ? (
+                        <option value="cancel">Cancel organization</option>
+                      ) : null}
+                    </select>
                   </td>
                 </tr>
               ))
@@ -321,65 +421,101 @@ export default function Organizations() {
                 </div>
 
                 {/* Actions */}
-                <div className="mt-4 grid grid-cols-2 gap-2 border-t border-slate-100 pt-4 dark:border-slate-800">
-                  <button
-                    className="btn w-full"
-                    onClick={() =>
-                      organizationService
-                        .suspend(o.id)
-                        .then(load)
-                    }
-                  >
-                    Suspend
-                  </button>
+                <div className="mt-4 border-t border-slate-100 pt-4 dark:border-slate-800">
+                  <select
+                    key={`${o.id}-${actionLoadingId === o.id ? "loading" : "ready"}`}
+                    className="input w-full"
+                    aria-label={`Actions for ${o.name}`}
+                    defaultValue=""
+                    disabled={actionLoadingId === o.id}
+                    onChange={(event) => {
+                      const action = event.target.value as OrganizationAction;
+                      event.currentTarget.value = "";
 
-                  <button
-                    className="btn w-full"
-                    onClick={() => setDel(o)}
+                      if (action) {
+                        void handleAction(o, action);
+                      }
+                    }}
                   >
-                    Delete
-                  </button>
+                    <option value="" disabled>
+                      {actionLoadingId === o.id ? "Please wait…" : "Choose an action"}
+                    </option>
+                    <option value="edit">Edit</option>
+
+                    {o.status === "Active" || o.status === "Trial" ? (
+                      <option value="suspend">Suspend</option>
+                    ) : null}
+
+                    {o.status === "Suspended" ? (
+                      <option value="reactivate">Reactivate</option>
+                    ) : null}
+
+                    {o.status !== "Cancelled" ? (
+                      <option value="cancel">Cancel organization</option>
+                    ) : null}
+                  </select>
                 </div>
+
               </div>
             ))}
           </>
         )}
       </div>
 
-      {/* Delete confirmation */}
+      {/* Organization cancellation confirmation */}
       {del && (
         <div
           role="dialog"
-          aria-modal
+          aria-modal="true"
+          aria-labelledby="cancel-organization-title"
           className="fixed inset-0 z-50 grid place-items-center bg-black/40 p-4"
         >
-          <div className="card w-full max-w-sm p-5">
-            <h2 className="font-semibold">
-              Delete {del.name}?
+          <div className="card w-full max-w-md p-5">
+            <h2
+              id="cancel-organization-title"
+              className="font-semibold"
+            >
+              Cancel {del.name}?
             </h2>
 
             <p className="mt-2 text-sm text-slate-500">
-              This is a UI preview. Nothing will be deleted.
+              This will mark the organization as Cancelled. Its records
+              will be retained, but organization members should no longer
+              be able to access the ERP.
             </p>
 
-            <div className="mt-4 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+            {actionError && (
+              <p role="alert" className="mt-3 text-sm text-red-600">
+                {actionError}
+              </p>
+            )}
+
+            <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
               <button
+                type="button"
                 className="btn"
-                onClick={() => setDel(null)}
+                disabled={isCancelling}
+                onClick={() => {
+                  setDel(null);
+                  setActionError("");
+                }}
               >
-                Cancel
+                Keep organization
               </button>
 
               <button
+                type="button"
                 className="btn btn-primary"
-                onClick={() => setDel(null)}
+                disabled={isCancelling}
+                onClick={() => void confirmCancellation()}
               >
-                Delete organization
+                {isCancelling ? "Cancelling…" : "Confirm cancellation"}
               </button>
             </div>
           </div>
         </div>
       )}
+
     </div>
   );
 }
