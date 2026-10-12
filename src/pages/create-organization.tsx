@@ -47,6 +47,7 @@ export default function CreateOrganization() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isSubmitting) return;
+    const form = e.currentTarget;
 
     setIsSubmitting(true);
     setSubmitError("");
@@ -65,7 +66,7 @@ export default function CreateOrganization() {
         throw new Error("Your session has expired. Please sign in again.");
       }
 
-      const formData = new FormData(e.currentTarget);
+      const formData = new FormData(form);
       const payload = Object.fromEntries(formData.entries());
 
       const response = await fetch(
